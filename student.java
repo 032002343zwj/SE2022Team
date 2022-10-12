@@ -1,4 +1,4 @@
-package word;
+package word.SE2022Team;
 
 import java.util.Iterator;
 

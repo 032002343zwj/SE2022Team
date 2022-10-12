@@ -1,5 +1,7 @@
 package word;
 
+import word.SE2022Team.student;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,16 +17,15 @@ public class test01 {
         while(i!=0){
 
 
-            ArrayList<student> al=new ArrayList<student>();
-            PrintWriter pw=new PrintWriter(new FileWriter("D:\\IDEA\\module\\module\\src\\word\\class.txt"),true);
+            ArrayList<student> al=new ArrayList<student>();   //将一个学生的出勤信息放入数组
+            PrintWriter pw=new PrintWriter(new FileWriter("D:\\IDEA\\module\\module\\src\\word\\class.csv"+i),true);
 
-//            pw.println("姓名    性别    学号      绩点     出勤1     出勤2     出勤3     出勤4     出勤5     出勤6     出勤7     出勤8     出勤9     出勤10     出勤11     出勤12     出勤13     出勤14     出勤15     出勤16     出勤17     出勤18     出勤19     出勤20     缺课率");
             Scanner sc=new Scanner(System.in);
             System.out.println("请输入"+i+"班的人数：");
             int total;
             total=sc.nextInt();
             Random r=new Random();
-            while(total!=0){
+            while(total!=0){    //产生一个学生的出勤信息
                 String name=getName();
                 String sex=getSex();
                 String num=getNum();
@@ -35,20 +36,20 @@ public class test01 {
                 DecimalFormat df=new DecimalFormat("0.0000");
                 grate= Double.parseDouble(df.format(grate));
                 student s=new student(name,sex,num,grate);
-                if(grate>=3.6&&grate<4.0){
+                if(grate>=3.6&&grate<4.0){  //根据绩点高低赋予每个人初始的出勤率
                     s.setChance(95.0);
                 }
                 else if(grate>=3.0&&grate<3.6){
                     s.setChance(90.0);
                 }
                 else if(grate>=2.5&&grate<3.0){
-                    s.setChance(80.0);
-                }
-                else if(grate>=2.0&&grate<2.5){
                     s.setChance(70.0);
                 }
-                else if(grate<2.0){
+                else if(grate>=2.0&&grate<2.5){
                     s.setChance(60.0);
+                }
+                else if(grate<2.0){
+                    s.setChance(50.0);
                 }
                 al.add(s);
                 total--;
@@ -56,7 +57,7 @@ public class test01 {
             }
 
             Random random=new Random();
-            int choice=r.nextInt(4)+4;  //产生这个课程缺勤80%的学生人数
+            int choice=r.nextInt(4)+4;  //在5~8中随机产生这个课程缺勤80%的学生人数
             getChoice(al,choice);
 
             for (student s1: al){
@@ -76,7 +77,7 @@ public class test01 {
 
     }
 
-    public static String condition(student s1) {
+    public static String condition(student s1) {    //生产20次出勤信息(0为缺勤，1为出勤)
         StringBuilder stu=new StringBuilder();
         if(s1.getFlag()){   //为该课程80%缺课的同学
             int choice=16;
@@ -125,11 +126,11 @@ public class test01 {
         return  stu.toString();
     }
 
-    public static void getChoice(ArrayList<student> al, int choice) {
+    public static void getChoice(ArrayList<student> al, int choice) {  //挑选缺课本课程80%的学生
         for (student stu: al){
             Random r=new Random();
             int x=r.nextInt(100);
-            if(x<=50&&choice!=0){
+            if(choice!=0){
                 if(stu.getGrate()<=2.5){
                     stu.setFlag(true);
                     choice--;
@@ -139,7 +140,7 @@ public class test01 {
     }
 
 
-    public static double getGrate() {
+    public static double getGrate() {   //正态分布获得绩点
         Random r=new Random();
         double f=r.nextGaussian()+3;
         return f;
